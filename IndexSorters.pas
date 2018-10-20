@@ -1,4 +1,41 @@
+{-------------------------------------------------------------------------------
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+-------------------------------------------------------------------------------}
+{===============================================================================
+
+  Index sorters
+
+    Classes designed to sort lists by using only list indices.
+
+    The list must provide compare and exchange functions, both accepting two
+    indices, and also lowest and highest item index.
+
+    Sorter then uses provided compare function to compare two items and, when
+    necessary, exchanges these two items using provided exchange function.
+
+    The compare function should return negative value when first item is
+    larger (should be higher) than second item, zero when the two items are equal
+    and positive value when first item is smaller (is in correct order in
+    relation to the second item).
+
+  ©František Milt 2018-10-20
+
+  Version 1.0
+
+  Dependencies:
+    AuxTypes   - github.com/ncs-sniper/Lib.AuxTypes
+    AuxClasses - github.com/ncs-sniper/Lib.AuxClasses
+
+===============================================================================}
 unit IndexSorters;
+
+{$IFDEF FPC}
+  {$MODE ObjFPC}{$H+}
+{$ENDIF}
 
 interface
 
@@ -170,7 +207,7 @@ Function TIndexSorter.Sorted(LowIndex, HighIndex: Integer): Boolean;
 begin
 fLowIndex := LowIndex;
 fHighIndex := HighIndex;
-Result := Sorted;
+Result := Self.Sorted;
 end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -179,8 +216,8 @@ Function TIndexSorter.Sorted: Boolean;
 var
   i:  Integer;
 begin
-InitCompareCoef;
 Result := True;
+InitCompareCoef;
 For i := fLowIndex to Pred(fHighIndex) do
   If CompareItems(i,i + 1) < 0 then
     begin
