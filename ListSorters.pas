@@ -7,7 +7,7 @@
 -------------------------------------------------------------------------------}
 {===============================================================================
 
-  Index sorters
+  List sorters
 
     Classes designed to sort lists by using only list indices.
 
@@ -37,7 +37,7 @@
     AuxClasses - github.com/ncs-sniper/Lib.AuxClasses
 
 ===============================================================================}
-unit IndexSorters;
+unit ListSorters;
 
 {$IFDEF FPC}
   {$MODE ObjFPC}{$H+}
@@ -50,7 +50,7 @@ uses
 
 {===============================================================================
 --------------------------------------------------------------------------------
-                                  TIndexSorter
+                                  TListSorter
 --------------------------------------------------------------------------------
 ===============================================================================}
 
@@ -62,9 +62,9 @@ type
   TExchangeFunction = procedure(Context: Pointer; Index1,Index2: Integer) of object;
 
 {===============================================================================
-    TIndexSorter - class declaration
+    TListSorter - class declaration
 ===============================================================================}
-  TIndexSorter = class(TCustomObject)
+  TListSorter = class(TCustomObject)
   protected
     fReversed:          Boolean;
     fContext:           Pointer;
@@ -109,43 +109,43 @@ type
 
 {===============================================================================
 --------------------------------------------------------------------------------
-                               TIndexBubbleSorter
+                               TListBubbleSorter
 --------------------------------------------------------------------------------
 ===============================================================================} 
 {===============================================================================
-    TIndexBubbleSorter - class declaration
+    TListBubbleSorter - class declaration
 ===============================================================================}
 
-  TIndexBubbleSorter = class(TIndexSorter)
+  TListBubbleSorter = class(TListSorter)
   protected
     procedure Execute; override;
   end;
 
 {===============================================================================
 --------------------------------------------------------------------------------
-                                TIndexQuickSorter
+                                TListQuickSorter
 --------------------------------------------------------------------------------
 ===============================================================================}
 {===============================================================================
-    TIndexQuickSorter - class declaration
+    TListQuickSorter - class declaration
 ===============================================================================}
 
-  TIndexQuickSorter = class(TIndexSorter)
+  TListQuickSorter = class(TListSorter)
   protected
     procedure Execute; override;
   end;
 
 {===============================================================================
 --------------------------------------------------------------------------------
-                                TIndexBogoSorter
+                                TListBogoSorter
 --------------------------------------------------------------------------------
 ===============================================================================}
 {===============================================================================
-    TIndexBogoSorter - class declaration
+    TListBogoSorter - class declaration
 ===============================================================================}
 
   // only for fun, do not use, seriously...
-  TIndexBogoSorter = class(TIndexSorter)
+  TListBogoSorter = class(TListSorter)
   protected
     procedure Execute; override;
   end;
@@ -154,17 +154,17 @@ implementation
 
 {===============================================================================
 --------------------------------------------------------------------------------
-                                  TIndexSorter
+                                  TListSorter
 --------------------------------------------------------------------------------
 ===============================================================================}
 {===============================================================================
-    TIndexSorter - class implementation
+    TListSorter - class implementation
 ===============================================================================}
 {-------------------------------------------------------------------------------
-    TIndexSorter - protected methods
+    TListSorter - protected methods
 -------------------------------------------------------------------------------}
 
-Function TIndexSorter.CompareItems(Index1,Index2: Integer): Integer;
+Function TListSorter.CompareItems(Index1,Index2: Integer): Integer;
 begin
 Inc(fCompareCount);
 If Assigned(fCompareMethod) then
@@ -177,7 +177,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TIndexSorter.ExchangeItems(Index1,Index2: Integer);
+procedure TListSorter.ExchangeItems(Index1,Index2: Integer);
 begin
 Inc(fExchangeCount);
 If Assigned(fExchangeMethod) then
@@ -188,7 +188,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TIndexSorter.InitCompareCoef;
+procedure TListSorter.InitCompareCoef;
 begin
 If fReversed xor fReversedCompare then
   fCompareCoef := -1
@@ -198,17 +198,17 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TIndexSorter.InitStatistics;
+procedure TListSorter.InitStatistics;
 begin
 fCompareCount := 0;
 fExchangeCount := 0;
 end;
 
 {-------------------------------------------------------------------------------
-    TIndexSorter - public methods
+    TListSorter - public methods
 -------------------------------------------------------------------------------}
 
-constructor TIndexSorter.Create;
+constructor TListSorter.Create;
 begin
 inherited Create;
 fReversed := False;
@@ -225,7 +225,7 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-constructor TIndexSorter.Create(CompareMethod: TCompareMethod; ExchangeMethod: TExchangeMethod);
+constructor TListSorter.Create(CompareMethod: TCompareMethod; ExchangeMethod: TExchangeMethod);
 begin
 Create;
 Initialize(CompareMethod,ExchangeMethod);
@@ -233,7 +233,7 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-constructor TIndexSorter.Create(Context: Pointer; CompareFunction: TCompareFunction; ExchangeFunction: TExchangeFunction);
+constructor TListSorter.Create(Context: Pointer; CompareFunction: TCompareFunction; ExchangeFunction: TExchangeFunction);
 begin
 Create;
 Initialize(Context,CompareFunction,ExchangeFunction);
@@ -241,7 +241,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TIndexSorter.Initialize(CompareMethod: TCompareMethod; ExchangeMethod: TExchangeMethod);
+procedure TListSorter.Initialize(CompareMethod: TCompareMethod; ExchangeMethod: TExchangeMethod);
 begin
 fCompareMethod := CompareMethod;
 fExchangeMethod := ExchangeMethod;
@@ -249,7 +249,7 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-procedure TIndexSorter.Initialize(Context: Pointer; CompareFunction: TCompareFunction; ExchangeFunction: TExchangeFunction);
+procedure TListSorter.Initialize(Context: Pointer; CompareFunction: TCompareFunction; ExchangeFunction: TExchangeFunction);
 begin
 fContext := Context;
 fCompareFunction := CompareFunction;
@@ -258,7 +258,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-Function TIndexSorter.Sorted(LowIndex, HighIndex: Integer): Boolean;
+Function TListSorter.Sorted(LowIndex, HighIndex: Integer): Boolean;
 begin
 fLowIndex := LowIndex;
 fHighIndex := HighIndex;
@@ -267,7 +267,7 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-Function TIndexSorter.Sorted: Boolean;
+Function TListSorter.Sorted: Boolean;
 var
   i:  Integer;
 begin
@@ -283,7 +283,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TIndexSorter.Sort(LowIndex, HighIndex: Integer);
+procedure TListSorter.Sort(LowIndex, HighIndex: Integer);
 begin
 fLowIndex := LowIndex;
 fHighIndex := HighIndex;
@@ -292,7 +292,7 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-procedure TIndexSorter.Sort;
+procedure TListSorter.Sort;
 begin
 InitStatistics;
 InitCompareCoef;
@@ -302,17 +302,17 @@ end;
 
 {===============================================================================
 --------------------------------------------------------------------------------
-                               TIndexBubbleSorter
+                               TListBubbleSorter
 --------------------------------------------------------------------------------
 ===============================================================================}
 {===============================================================================
-    TIndexBubbleSorter - class implementation
+    TListBubbleSorter - class implementation
 ===============================================================================}
 {-------------------------------------------------------------------------------
-    TIndexBubbleSorter - protected methods
+    TListBubbleSorter - protected methods
 -------------------------------------------------------------------------------}
 
-procedure TIndexBubbleSorter.Execute;
+procedure TListBubbleSorter.Execute;
 var
   i,j:      Integer;
   ExchCntr: Integer;
@@ -335,17 +335,17 @@ end;
 
 {===============================================================================
 --------------------------------------------------------------------------------
-                                TIndexQuickSorter
+                                TListQuickSorter
 --------------------------------------------------------------------------------
 ===============================================================================}
 {===============================================================================
-    TIndexQuickSorter - class implementation
+    TListQuickSorter - class implementation
 ===============================================================================}
 {-------------------------------------------------------------------------------
-    TIndexQuickSorter - protected methods
+    TListQuickSorter - protected methods
 -------------------------------------------------------------------------------}
 
-procedure TIndexQuickSorter.Execute;
+procedure TListQuickSorter.Execute;
 
   procedure QuickSort(Left,Right: Integer);
   var
@@ -385,17 +385,17 @@ end;
 
 {===============================================================================
 --------------------------------------------------------------------------------
-                                TIndexBogoSorter
+                                TListBogoSorter
 --------------------------------------------------------------------------------
 ===============================================================================}
 {===============================================================================
-    TIndexBogoSorter - class implementation
+    TListBogoSorter - class implementation
 ===============================================================================}
 {-------------------------------------------------------------------------------
-    TIndexBogoSorter - protected methods
+    TListBogoSorter - protected methods
 -------------------------------------------------------------------------------}
 
-procedure TIndexBogoSorter.Execute;
+procedure TListBogoSorter.Execute;
 var
   i:  Integer;
 begin
