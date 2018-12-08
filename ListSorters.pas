@@ -59,7 +59,7 @@ type
   TCompareFunction = Function(Context: Pointer; Index1,Index2: Integer): Integer;
 
   TExchangeMethod = procedure(Index1,Index2: Integer) of object;
-  TExchangeFunction = procedure(Context: Pointer; Index1,Index2: Integer) of object;
+  TExchangeFunction = procedure(Context: Pointer; Index1,Index2: Integer);
 
 {===============================================================================
     TListSorter - class declaration
