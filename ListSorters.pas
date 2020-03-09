@@ -28,11 +28,11 @@
       - quick sort (could use some testing and optimizations)
       - bogo sort (only for fun and tests)
 
-  Version 1.1 (2019-09-22)
+  Version 1.1.1 (2020-03-09)
 
-  Last change 2019-09-22
+  Last change 2020-03-09
 
-  ©2018-2019 František Milt
+  ©2018-2020 František Milt
 
   Contacts:
     František Milt: frantisek.milt@gmail.com
@@ -211,13 +211,13 @@ If Index1 <> Index2 then
       fBreakCallback(fContext,Self,BreakProcessing);
     If not BreakProcessing then
       begin
-        Inc(fCompareCount);
         If Assigned(fCompareMethod) then
           Result := fCompareMethod(Index1,Index2) * fCompareCoef
         else If Assigned(fCompareFunction) then
           Result := fCompareFunction(fContext,Index1,Index2) * fCompareCoef
         else
           Result := 0;
+        Inc(fCompareCount);
         // stabilization
         If (Result = 0) and (Length(fIndexArray) > 0) then
           Result := (fIndexArray[Index1 - fLowIndex] - fIndexArray[Index2 - fLowIndex]);
@@ -237,11 +237,11 @@ var
 begin
 If Index1 <> Index2 then
   begin
-    Inc(fExchangeCount);
     If Assigned(fExchangeMethod) then
       fExchangeMethod(Index1,Index2)
     else If Assigned(fExchangeFunction) then
       fExchangeFunction(fContext,Index1,Index2);
+    Inc(fExchangeCount);      
     // stabilization
     If Length(fIndexArray) > 0 then
       begin
