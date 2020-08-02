@@ -30,7 +30,7 @@
 
   Version 1.1.1 (2020-03-09)
 
-  Last change 2020-03-09
+  Last change 2020-08-02
 
   ©2018-2020 František Milt
 
@@ -56,8 +56,9 @@
 unit ListSorters;
 
 {$IFDEF FPC}
-  {$MODE ObjFPC}{$H+}
+  {$MODE ObjFPC}
 {$ENDIF}
+{$H+}
 
 interface
 
