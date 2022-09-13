@@ -97,8 +97,8 @@ type
     fExchangeMethod:    TExchangeMethod;
     fExchangeFunction:  TExchangeFunction;
     fCompareCoef:       Integer;
-    fBreakEvent:        TBreakEvent;
-    fBreakCallback:     TBreakCallback;
+    fOnBreakEvent:      TBreakEvent;
+    fOnBreakCallback:   TBreakCallback;
     // some statistics
     fCompareCount:      Integer;
     fExchangeCount:     Integer;
@@ -132,8 +132,9 @@ type
     property ExchangeFunction: TExchangeFunction read fExchangeFunction write fExchangeFunction;
     property CompareCount: Integer read fCompareCount;
     property ExchangeCount: Integer read fExchangeCount;
-    property BreakEvent: TBreakEvent read fBreakEvent write fBreakEvent;
-    property BreakCallback: TBreakCallback read fBreakCallback write fBreakCallback;
+    property OnBreak: TBreakEvent read fOnBreakEvent write fOnBreakEvent;
+    property OnBreakEvent: TBreakEvent read fOnBreakEvent write fOnBreakEvent;
+    property OnBreakCallback: TBreakCallback read fOnBreakCallback write fOnBreakCallback;
   end;
 
 {===============================================================================
@@ -206,10 +207,10 @@ begin
 If Index1 <> Index2 then
   begin
     BreakProcessing := False;
-    If Assigned(fBreakEvent) then
-      fBreakEvent(Self,BreakProcessing);
-    If Assigned(fBreakCallback) then
-      fBreakCallback(fContext,Self,BreakProcessing);
+    If Assigned(fOnBreakEvent) then
+      fOnBreakEvent(Self,BreakProcessing)
+    else If Assigned(fOnBreakCallback) then
+      fOnBreakCallback(fContext,Self,BreakProcessing);
     If not BreakProcessing then
       begin
         If Assigned(fCompareMethod) then
@@ -288,8 +289,8 @@ fCompareFunction := nil;
 fExchangeMethod := nil;
 fExchangeFunction := nil;
 fCompareCoef := 1;
-fBreakEvent := nil;
-fBreakCallback := nil;
+fOnBreakEvent := nil;
+fOnBreakCallback := nil;
 InitStatistics;
 SetLength(fIndexArray,0);
 end;
